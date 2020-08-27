@@ -1,0 +1,3 @@
+build:
+	mkdir -p out/build
+	go build -o ./out/build ./cmd/...
