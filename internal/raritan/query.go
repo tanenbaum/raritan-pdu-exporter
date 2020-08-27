@@ -3,13 +3,15 @@ package raritan
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/url"
 
 	"gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
+	"k8s.io/klog"
 )
 
 var (
-	pduPath = mustURL("/model/pdu/0")
+	bulkPath = mustURL("/bulk")
 )
 
 // Client to query Raritan PDU
@@ -22,15 +24,22 @@ type result struct {
 	Return json.RawMessage `json:"_ret_"`
 }
 
-// GetPDUMetadata returns metadata for main PDU entry
-func (c *Client) GetPDUMetadata() (interface{}, error) {
-	ret := map[string]interface{}{}
-	if _, err := c.call(*c.BaseURL.ResolveReference(&pduPath), rpc.Request{
-		Method: "getMetaData",
-	}, &ret); err != nil {
-		return nil, err
-	}
-	return ret, nil
+type bulkResult struct {
+	Responses []bulkResponse
+}
+
+type bulkResponse struct {
+	JSON     *rpc.Response
+	StatCode int
+}
+
+type bulkRequest struct {
+	// RID is resource path for bulk endpoint
+	RID string
+	// Request is body of request
+	Request rpc.Request
+	// Return type to be unmarshalled to, pointer
+	Return interface{}
 }
 
 func (c *Client) call(url url.URL, req rpc.Request, ret interface{}) (*result, error) {
@@ -38,14 +47,8 @@ func (c *Client) call(url url.URL, req rpc.Request, ret interface{}) (*result, e
 	if err != nil {
 		return nil, err
 	}
-	if r.IsError() {
-		return nil, r.Error
-	}
-	if r.Result == nil {
-		return nil, errors.New("Expected RPC result not nil")
-	}
 	res := &result{}
-	if err := json.Unmarshal(*r.Result, res); err != nil {
+	if err := unmarshallResult(r, res); err != nil {
 		return nil, err
 	}
 	if ret != nil {
@@ -53,6 +56,71 @@ func (c *Client) call(url url.URL, req rpc.Request, ret interface{}) (*result, e
 			return nil, err
 		}
 	}
+	return res, nil
+}
+
+func unmarshallResult(r *rpc.Response, ret interface{}) error {
+	if r.IsError() {
+		return r.Error
+	}
+	if r.Result == nil {
+		return errors.New("Expected RPC result not nil")
+	}
+
+	if err := json.Unmarshal(*r.Result, ret); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) bulkCall(br []bulkRequest) (*bulkResult, error) {
+	reqs := make([]map[string]interface{}, len(br))
+	for i, r := range br {
+		reqs[i] = map[string]interface{}{
+			"rid": r.RID,
+			"json": map[string]interface{}{
+				"jsonrpc": "2.0",
+				"method":  r.Request.Method,
+				"params":  r.Request.Params,
+				"id":      i,
+			},
+		}
+	}
+
+	r, err := c.RPCClient.Call(*c.BaseURL.ResolveReference(&bulkPath), rpc.Request{
+		Method: "performBulk",
+		Params: map[string]interface{}{
+			"requests": reqs,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	res := &bulkResult{}
+	if err := unmarshallResult(r, res); err != nil {
+		return nil, err
+	}
+
+	klog.Infof("%v", string(*res.Responses[1].JSON.Result))
+
+	for i, r := range res.Responses {
+		if r.StatCode != 200 {
+			return nil, fmt.Errorf("Bulk response code not 200: %d", r.StatCode)
+		}
+		req := br[i]
+		if req.Return == nil {
+			continue
+		}
+
+		res := &result{}
+		if err := unmarshallResult(r.JSON, res); err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal(res.Return, req.Return); err != nil {
+			return nil, err
+		}
+	}
+
 	return res, nil
 }
 

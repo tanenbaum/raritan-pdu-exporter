@@ -43,9 +43,9 @@ func Execute() {
 		BaseURL: *baseURL,
 	}
 
-	res, err := q.GetPDUMetadata()
+	res, err := q.GetPDUInfo()
 	if err != nil {
 		klog.Exit(err)
 	}
-	klog.Infof("PDU Metadata: %v", res)
+	klog.Infof("PDU Info: %+v", res)
 }
