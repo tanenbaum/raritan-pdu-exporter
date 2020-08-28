@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
-	"k8s.io/klog"
 )
 
 var (
@@ -49,7 +48,7 @@ func (c *Client) call(url url.URL, req rpc.Request, ret interface{}) (*result, e
 	}
 	res := &result{}
 	if err := unmarshallResult(r, res); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error unmarshalling result for %s method %s: %w", url.String(), req.Method, err)
 	}
 	if ret != nil {
 		if err := json.Unmarshal(res.Return, ret); err != nil {
@@ -101,8 +100,6 @@ func (c *Client) bulkCall(br []bulkRequest) (*bulkResult, error) {
 		return nil, err
 	}
 
-	klog.Infof("%v", string(*res.Responses[1].JSON.Result))
-
 	for i, r := range res.Responses {
 		if r.StatCode != 200 {
 			return nil, fmt.Errorf("Bulk response code not 200: %d", r.StatCode)
@@ -114,7 +111,7 @@ func (c *Client) bulkCall(br []bulkRequest) (*bulkResult, error) {
 
 		res := &result{}
 		if err := unmarshallResult(r.JSON, res); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("Error unmarshalling result for %s method %s: %w", req.RID, req.Request.Method, err)
 		}
 		if err := json.Unmarshal(res.Return, req.Return); err != nil {
 			return nil, err

@@ -35,6 +35,14 @@ type PDUInfo struct {
 	PDUSettings
 }
 
+// Resource is generic resource holder for reference link
+type Resource struct {
+	// RID resource id
+	RID string
+	// Type string for resource
+	Type string
+}
+
 // GetPDUInfo returns info for main PDU entry
 func (c *Client) GetPDUInfo() (*PDUInfo, error) {
 	meta := &PDUMetadata{}
@@ -63,4 +71,26 @@ func (c *Client) GetPDUInfo() (*PDUInfo, error) {
 		PDUMetadata: *meta,
 		PDUSettings: *sett,
 	}, nil
+}
+
+func (c *Client) GetPDUInlets() ([]Resource, error) {
+	ret := []Resource{}
+	if _, err := c.call(*c.BaseURL.ResolveReference(&pduPath), rpc.Request{
+		Method: "getInlets",
+	}, &ret); err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func (c *Client) GetPDUOutlets() ([]Resource, error) {
+	ret := []Resource{}
+	if _, err := c.call(*c.BaseURL.ResolveReference(&pduPath), rpc.Request{
+		Method: "getOutlets",
+	}, &ret); err != nil {
+		return nil, err
+	}
+
+	return ret, nil
 }
