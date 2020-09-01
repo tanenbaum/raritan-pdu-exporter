@@ -138,5 +138,6 @@ func (c *client) Call(url url.URL, req Request) (*Response, error) {
 }
 
 func (c *client) BatchCall(url url.URL, reqs []Request) ([]Response, error) {
+	// Raritan RPC doesn't support the standardised batch call so I haven't written it
 	panic("Not implemented")
 }

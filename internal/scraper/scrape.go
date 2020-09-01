@@ -35,35 +35,31 @@ func Run(client raritan.Client, interval uint) error {
 
 	klog.V(1).Infof("PDU Outlets: %+v", olsInfo)
 
-	go wait.UntilWithContext(context.TODO(), func(ctx context.Context) {
-		sens := []raritan.Resource{}
-		for _, v := range insInfo[0].InletSensors {
-			if v != nil {
-				sens = append(sens, *v)
-			}
-		}
-		ss, err := client.GetSensorReadings(sens)
-		if err != nil {
-			klog.Errorf("Error getting inlet sensors: %v", err)
-			return
-		}
-		klog.V(1).Infof("Inlet sensors: %+v", ss)
-	}, time.Second*time.Duration(interval))
+	sens := allSensors(insInfo, olsInfo)
 
 	wait.UntilWithContext(context.TODO(), func(ctx context.Context) {
-		sens := []raritan.Resource{}
-		for _, v := range olsInfo[0].OutletSensors {
-			if v != nil {
-				sens = append(sens, *v)
-			}
-		}
 		ss, err := client.GetSensorReadings(sens)
 		if err != nil {
-			klog.Errorf("Error getting outlet sensors: %v", err)
+			klog.Errorf("Error getting sensor data: %v", err)
 			return
 		}
-		klog.V(1).Infof("Outlet sensors: %+v", ss)
+		klog.V(1).Infof("All sensors: %+v", ss)
 	}, time.Second*time.Duration(interval))
 
 	return nil
+}
+
+func allSensors(iis []raritan.InletInfo, ois []raritan.OutletInfo) []raritan.Resource {
+	sens := []raritan.Resource{}
+	for _, i := range iis {
+		for _, v := range i.InletSensors {
+			sens = append(sens, *v)
+		}
+	}
+	for _, o := range ois {
+		for _, v := range o.OutletSensors {
+			sens = append(sens, *v)
+		}
+	}
+	return sens
 }
