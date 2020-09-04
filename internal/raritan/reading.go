@@ -14,6 +14,18 @@ type Reading struct {
 	Value     float64
 }
 
+type Sensors = map[string]Resource
+
+func filterEmptySensors(ss map[string]*Resource) Sensors {
+	s := Sensors{}
+	for k, v := range ss {
+		if v != nil {
+			s[k] = *v
+		}
+	}
+	return s
+}
+
 func (c *Client) GetSensorReadings(sens []Resource) ([]Reading, error) {
 	reqs := make([]bulkRequest, len(sens))
 	for i, s := range sens {

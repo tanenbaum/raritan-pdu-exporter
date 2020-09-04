@@ -30,7 +30,7 @@ type Response struct {
 	// Error required if error occurred
 	Error *Error `json:"error"`
 	// Result json if successful - raw message so we can convert later
-	Result *json.RawMessage
+	Result *json.RawMessage `json:"result"`
 }
 
 // Error from RPC response
@@ -53,19 +53,15 @@ type Auth struct {
 	Password string
 }
 
-type body struct {
+// Body contains standard RPC body fields
+type Body struct {
 	Version string `json:"jsonrpc"`
 	ID      int    `json:"id"`
 }
 
 type request struct {
 	Request
-	body
-}
-
-type response struct {
-	Response
-	body
+	Body
 }
 
 type client struct {
@@ -105,7 +101,7 @@ func NewClient(timeout time.Duration, auth Auth) Client {
 func (c *client) Call(url url.URL, req Request) (*Response, error) {
 	bs, err := json.Marshal(request{
 		Request: req,
-		body: body{
+		Body: Body{
 			Version: "2.0",
 			ID:      nextRequestID(),
 		},

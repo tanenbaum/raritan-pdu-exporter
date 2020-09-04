@@ -7,7 +7,7 @@ type InletInfo struct {
 	Resource
 	InletMetadata
 	InletSettings
-	InletSensors
+	Sensors
 }
 
 // InletMetadata metadata
@@ -20,9 +20,6 @@ type InletMetadata struct {
 type InletSettings struct {
 	Name string
 }
-
-// InletSensors - map string -> RID - nil resource is not provided
-type InletSensors = map[string]*Resource
 
 func (c *Client) GetInletsInfo(ins []Resource) ([]InletInfo, error) {
 	reqs := make([]bulkRequest, len(ins)*3)
@@ -47,7 +44,7 @@ func (c *Client) GetInletsInfo(ins []Resource) ([]InletInfo, error) {
 			Request: rpc.Request{
 				Method: "getSensors",
 			},
-			Return: &InletSensors{},
+			Return: &map[string]*Resource{},
 		}
 	}
 	if _, err := c.bulkCall(reqs); err != nil {
@@ -59,12 +56,12 @@ func (c *Client) GetInletsInfo(ins []Resource) ([]InletInfo, error) {
 		j := i * 3
 		meta := reqs[j].Return.(*InletMetadata)
 		sett := reqs[j+1].Return.(*InletSettings)
-		sens := reqs[j+2].Return.(*InletSensors)
+		sens := reqs[j+2].Return.(*map[string]*Resource)
 		infos[i] = InletInfo{
 			Resource:      in,
 			InletMetadata: *meta,
 			InletSettings: *sett,
-			InletSensors:  *sens,
+			Sensors:       filterEmptySensors(*sens),
 		}
 	}
 	return infos, nil

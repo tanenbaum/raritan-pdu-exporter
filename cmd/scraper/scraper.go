@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/url"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/jessevdk/go-flags"
@@ -15,6 +19,7 @@ import (
 
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -61,13 +66,36 @@ func Execute() {
 
 	res, err := q.GetPDUInfo()
 	if err != nil {
-		klog.Exit(err)
+		klog.Exitf("Error getting PDU info: %v", err)
 	}
 	klog.V(1).Infof("PDU Info: %+v", res)
 
-	if err := scraper.Run(q, conf.Interval); err != nil {
+	collector := &scraper.PrometheusCollector{
+		PDUInfo: *res,
+	}
+	prometheus.MustRegister(collector)
+
+	ctx, cf := context.WithCancel(context.Background())
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-sigs
+		cf()
+	}()
+
+	ls, err := scraper.Run(ctx, q, conf.Interval)
+	if err != nil {
 		klog.Exit(err)
 	}
+
+	go func() {
+		for l := range ls {
+			klog.Infof("%v", l)
+			collector.SetLogs(l)
+		}
+	}()
+
+	<-ctx.Done()
 }
 
 func metrics(c Config) {

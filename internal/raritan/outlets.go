@@ -8,7 +8,7 @@ type OutletInfo struct {
 	OutletMetadata
 	OutletSettings
 	OutletState
-	OutletSensors
+	Sensors
 }
 
 // OutletMetadata metadata
@@ -21,9 +21,6 @@ type OutletMetadata struct {
 type OutletSettings struct {
 	Name string
 }
-
-// OutletSensors - map string -> RID - nil resource is not provided
-type OutletSensors = map[string]*Resource
 
 // OutletState indicating state
 type OutletState struct {
@@ -61,7 +58,7 @@ func (c *Client) GetOutletsInfo(os []Resource) ([]OutletInfo, error) {
 			Request: rpc.Request{
 				Method: "getSensors",
 			},
-			Return: &OutletSensors{},
+			Return: &map[string]*Resource{},
 		}
 	}
 	if _, err := c.bulkCall(reqs); err != nil {
@@ -74,13 +71,13 @@ func (c *Client) GetOutletsInfo(os []Resource) ([]OutletInfo, error) {
 		meta := reqs[j].Return.(*OutletMetadata)
 		sett := reqs[j+1].Return.(*OutletSettings)
 		stat := reqs[j+2].Return.(*OutletState)
-		sens := reqs[j+3].Return.(*OutletSensors)
+		sens := reqs[j+3].Return.(*map[string]*Resource)
 		infos[i] = OutletInfo{
 			Resource:       in,
 			OutletMetadata: *meta,
 			OutletSettings: *sett,
 			OutletState:    *stat,
-			OutletSensors:  *sens,
+			Sensors:        filterEmptySensors(*sens),
 		}
 	}
 	return infos, nil
