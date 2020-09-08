@@ -13,9 +13,9 @@ import (
 	"github.com/jessevdk/go-flags"
 	"k8s.io/klog/v2"
 
+	"gitlab.com/edgetic/hw/pdu-sensors/internal/exporter"
 	"gitlab.com/edgetic/hw/pdu-sensors/internal/raritan"
 	"gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/scraper"
 
 	"net/http"
 
@@ -70,7 +70,7 @@ func Execute() {
 	}
 	klog.V(1).Infof("PDU Info: %+v", res)
 
-	collector := &scraper.PrometheusCollector{
+	collector := &exporter.PrometheusCollector{
 		PDUInfo: *res,
 	}
 	prometheus.MustRegister(collector)
@@ -83,7 +83,7 @@ func Execute() {
 		cf()
 	}()
 
-	ls, err := scraper.Run(ctx, q, conf.Interval)
+	ls, err := exporter.Run(ctx, q, conf.Interval)
 	if err != nil {
 		klog.Exit(err)
 	}

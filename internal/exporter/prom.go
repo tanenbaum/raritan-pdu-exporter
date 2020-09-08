@@ -1,4 +1,4 @@
-package scraper
+package exporter
 
 import (
 	"fmt"
@@ -44,7 +44,9 @@ func (c *PrometheusCollector) Collect(metric chan<- prometheus.Metric) {
 	for _, l := range c.logs {
 		metric <- prometheus.NewMetricWithTimestamp(l.Time,
 			prometheus.MustNewConstMetric(
-				prometheus.NewDesc(prometheus.BuildFQName(namespace, strings.ToLower(l.Type), c.metricNames(l.Sensor)), fmt.Sprintf("%s sensor reading for %s", l.Type, l.Sensor), []string{"label"}, labels),
+				prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, strings.ToLower(l.Type), c.metricNames(l.Sensor)),
+					fmt.Sprintf("%s sensor reading for %s", l.Type, l.Sensor), []string{"label"}, labels),
 				prometheus.GaugeValue, l.Value, l.Label))
 	}
 }
