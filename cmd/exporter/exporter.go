@@ -104,6 +104,10 @@ func metrics(c Config) {
 	}
 
 	klog.V(1).Infof("Starting Prometheus metrics server on %d", c.Port)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprint(w, `PDU Metrics are at <a href="/metrics">/metrics<a>`)
+	})
 	http.Handle("/metrics", promhttp.Handler())
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", c.Port), nil); err != nil {
 		klog.Errorf("HTTP server error: %v", err)

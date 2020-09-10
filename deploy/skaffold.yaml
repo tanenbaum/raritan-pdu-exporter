@@ -4,9 +4,30 @@ metadata:
   name: pdu-sensors
 
 build:
+  local:
+    push: false
   artifacts:
   - image: registry.gitlab.com/edgetic/hw/pdu-sensors/exporter
     docker:
       dockerfile: build/exporter/Dockerfile
       buildArgs:
         GO_VERSION: "{{.GO_VERSION}}"
+  tagPolicy:
+    sha256: {}
+
+deploy:
+  helm:
+    flags:
+      install:
+      - --atomic
+    releases:
+    - name: dev-exporter
+      chartPath: ./deploy/charts/pdu-sensors
+      imageStrategy:
+        helm: {}
+      artifactOverrides:
+        image: registry.gitlab.com/edgetic/hw/pdu-sensors/exporter
+      setValueTemplates:
+        pduUsername: "{{.PDU_USERNAME}}"
+        pduPassword: "{{.PDU_PASSWORD}}"
+        pduAddress: "{{.PDU_ADDRESS}}"

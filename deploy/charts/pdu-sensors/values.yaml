@@ -14,6 +14,17 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# pdu address, including protocol and port
+pduAddress: http://localhost:3000
+# pdu scrape interval in seconds
+pduScrapeInterval: 10
+# pdu username and password
+pduUsername: test
+pduPassword: test
+# existingSecret for username and password of PDU
+# should contain pduUsername and pduPassword fields
+existingSecret: null
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -35,6 +46,9 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+# port for metrics endpoint of exporter
+metricsPort: 2112
 
 service:
   type: ClusterIP
