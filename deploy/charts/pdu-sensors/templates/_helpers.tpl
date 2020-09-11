@@ -61,3 +61,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Call a sub-chart template from the parent chart with approximated values
+*/}}
+{{- define "call-subchart" }}
+{{- $dot := index . 0 }}
+{{- $subchart := index . 1 }}
+{{- $template := index . 2 }}
+{{- include $template (dict "Chart" (dict "Name" $subchart) "Values" (index $dot.Values $subchart) "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
+{{- end }}

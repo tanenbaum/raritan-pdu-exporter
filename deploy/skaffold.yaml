@@ -27,6 +27,10 @@ deploy:
         helm: {}
       artifactOverrides:
         image: registry.gitlab.com/edgetic/hw/pdu-sensors/exporter
+      setValues:
+        influxdb.enabled: true
+        grafana.enabled: true
+        telegrafSidecar.enabled: true
       setValueTemplates:
         pduUsername: "{{.PDU_USERNAME}}"
         pduPassword: "{{.PDU_PASSWORD}}"

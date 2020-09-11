@@ -23,3 +23,5 @@ skaffold-build:
 	skaffold build -f $(SKAFFOLD_FILE)
 skaffold-run:
 	skaffold run --detect-minikube --cache-artifacts=false -f $(SKAFFOLD_FILE)
+skaffold-delete:
+	skaffold delete --detect-minikube -f $(SKAFFOLD_FILE)

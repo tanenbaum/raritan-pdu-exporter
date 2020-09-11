@@ -91,3 +91,31 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+telegrafSidecar:
+  enabled: false
+  image:
+    repository: "telegraf"
+    tag: "1.14-alpine"
+    pullPolicy: IfNotPresent
+  # set influxdbUrl if influxdb is not configured or to override
+  influxdbUrl: ""
+  influxdbDatabase: "pdu-sensors"
+  healthPort: 8888
+  resources: {}
+  securityContext: {}
+
+
+# influxdb data store for telegraf
+influxdb:
+  enabled: false
+
+# grafana dashboard for viewing influxdb data
+grafana:
+  enabled: false
+  grafana.ini:
+    security:
+      disable_initial_admin_creation: true
+    auth.anonymous:
+      enabled: true
+      org_role: Admin

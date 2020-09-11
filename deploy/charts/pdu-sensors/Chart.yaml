@@ -21,3 +21,13 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 0.0.1
+
+dependencies:
+  - name: influxdb
+    version: ~4.8.4
+    repository: https://helm.influxdata.com
+    condition: influxdb.enabled
+  - name: grafana
+    version: ~5.6.2
+    repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled
