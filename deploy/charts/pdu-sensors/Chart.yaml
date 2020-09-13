@@ -25,7 +25,7 @@ appVersion: 0.0.1
 dependencies:
   - name: influxdb
     version: ~4.8.4
-    repository: https://helm.influxdata.com
+    repository: https://influxdata.github.io/helm-charts
     condition: influxdb.enabled
   - name: grafana
     version: ~5.6.2

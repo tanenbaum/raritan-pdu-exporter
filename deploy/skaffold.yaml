@@ -29,6 +29,7 @@ deploy:
         image: registry.gitlab.com/edgetic/hw/pdu-sensors/exporter
       setValues:
         influxdb.enabled: true
+        influxdb.persistence.enabled: false
         grafana.enabled: true
         telegrafSidecar.enabled: true
       setValueTemplates:
