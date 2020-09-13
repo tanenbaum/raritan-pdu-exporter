@@ -1,5 +1,8 @@
 stages:
 - build_images
+
+variables:
+  GO_VERSION: "1.15"
   
 .build_image:
   image:
