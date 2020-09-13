@@ -3,6 +3,7 @@ stages:
 
 variables:
   GO_VERSION: "1.15"
+  CI_IMAGE_TAG: $CI_COMMIT_SHA
   
 .build_image:
   image:
