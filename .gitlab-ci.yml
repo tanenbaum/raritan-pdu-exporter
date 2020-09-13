@@ -1,0 +1,18 @@
+stages:
+- build_images
+  
+.build_image:
+  image:
+    name: registry.gitlab.com/edgetic/ci/makisu:v0.1.12
+  stage: build_images
+  variables:
+    BUILD_ARG: --build-arg GO_VERSION=$GO_VERSION
+  only:
+  - master
+  - tags
+  - merge_requests
+
+build exporter image:
+  extends: .build_image
+  script:
+  - build -f build/exporter/Dockerfile $BUILD_ARG -p $CI_PROJECT_PATH/exporter
