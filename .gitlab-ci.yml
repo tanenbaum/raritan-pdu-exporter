@@ -15,4 +15,4 @@ stages:
 build exporter image:
   extends: .build_image
   script:
-  - build -f build/exporter/Dockerfile $BUILD_ARG -p $CI_PROJECT_PATH/exporter
+  - build -f build/exporter/Dockerfile $BUILD_ARG -p $CI_PROJECT_PATH/exporter .
