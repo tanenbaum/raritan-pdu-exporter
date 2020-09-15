@@ -71,3 +71,10 @@ Call a sub-chart template from the parent chart with approximated values
 {{- $template := index . 2 }}
 {{- include $template (dict "Chart" (dict "Name" $subchart) "Values" (index $dot.Values $subchart) "Release" $dot.Release "Capabilities" $dot.Capabilities) }}
 {{- end }}
+
+{{/*
+Influxdb URL based on explicit configuration or deployed chart
+*/}}
+{{- define "pdu-sensors.influxdb-url" -}}
+{{ default (include "call-subchart" (list . "influxdb" "influxdb.fullname") | printf "http://%s:8086") .Values.telegrafSidecar.influxdbUrl }}
+{{- end }}

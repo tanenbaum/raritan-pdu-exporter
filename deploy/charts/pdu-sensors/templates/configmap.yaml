@@ -18,8 +18,10 @@ data:
       metric_version = 1
 
     [[outputs.influxdb]]
-      urls = ["{{ default (include "call-subchart" (list . "influxdb" "influxdb.fullname") | printf "http://%s:8086") .Values.telegrafSidecar.influxdbUrl }}"]
+      urls = ["{{ include "pdu-sensors.influxdb-url" . }}"]
       database = "{{ .Values.telegrafSidecar.influxdbDatabase }}"
+      tagexclude =  {{ .Values.telegrafSidecar.tagexclude | toJson }}
+      namepass = {{ .Values.telegrafSidecar.namepass | toJson }}
       
     [[outputs.health]]
       service_address = "http://:8888"

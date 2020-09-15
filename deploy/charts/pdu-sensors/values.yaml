@@ -102,6 +102,10 @@ telegrafSidecar:
   influxdbUrl: ""
   influxdbDatabase: "pdu-sensors"
   healthPort: 8888
+  tagexclude:
+    - url
+  namepass: 
+    - pdu*
   resources: {}
   securityContext: {}
 
@@ -119,3 +123,16 @@ grafana:
     auth.anonymous:
       enabled: true
       org_role: Admin
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Influxdb
+        type: influxdb
+        url: "http://{{ .Release.Name }}-influxdb:8086"
+        access: proxy
+        database: "pdu-sensors"
+        isDefault: true
+        jsonData:
+          httpMode: GET
+        editable: true
