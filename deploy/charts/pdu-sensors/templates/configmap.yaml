@@ -8,7 +8,7 @@ data:
   {{- if .Values.telegrafSidecar.enabled }}
   telegraf.conf: |+
     [agent]
-      interval = "{{ .Values.pduScrapeInterval }}s"
+      interval = "{{ default .Values.pduScrapeInterval .Values.telegrafSidecar.scrapeInterval }}s"
       round_interval = true
       logfile = ""
       omit_hostname = true
@@ -22,6 +22,15 @@ data:
       database = "{{ .Values.telegrafSidecar.influxdbDatabase }}"
       tagexclude =  {{ .Values.telegrafSidecar.tagexclude | toJson }}
       namepass = {{ .Values.telegrafSidecar.namepass | toJson }}
+
+    # rename prometheus types to "value"
+    [[processors.rename]]
+      [[processors.rename.replace]]
+        field = "gauge"
+        dest = "value"
+      [[processors.rename.replace]]
+        field = "counter"
+        dest = "value"
       
     [[outputs.health]]
       service_address = "http://:8888"

@@ -94,6 +94,8 @@ affinity: {}
 
 telegrafSidecar:
   enabled: false
+  # scrapeInterval defaults to pduScrapeInterval
+  scrapeInterval: 0
   image:
     repository: "telegraf"
     tag: "1.14-alpine"
@@ -104,7 +106,7 @@ telegrafSidecar:
   healthPort: 8888
   tagexclude:
     - url
-  namepass: 
+  namepass:
     - pdu*
   resources: {}
   securityContext: {}
@@ -122,7 +124,7 @@ grafana:
       disable_initial_admin_creation: true
     auth.anonymous:
       enabled: true
-      org_role: Admin
+      org_role: Editor
   datasources:
     datasources.yaml:
       apiVersion: 1
