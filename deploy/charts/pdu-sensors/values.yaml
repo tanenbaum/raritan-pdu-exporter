@@ -103,6 +103,8 @@ telegrafSidecar:
   # set influxdbUrl if influxdb is not configured or to override
   influxdbUrl: ""
   influxdbDatabase: "pdu-sensors"
+  influxdbUsername: ""
+  influxdbPassword: ""
   healthPort: 8888
   tagexclude:
     - url
@@ -134,6 +136,8 @@ grafana:
         url: "http://{{ .Release.Name }}-influxdb:8086"
         access: proxy
         database: "pdu-sensors"
+        user: ""
+        password: ""
         isDefault: true
         jsonData:
           httpMode: GET
