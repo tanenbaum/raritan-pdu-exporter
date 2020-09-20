@@ -76,5 +76,9 @@ Call a sub-chart template from the parent chart with approximated values
 Influxdb URL based on explicit configuration or deployed chart
 */}}
 {{- define "pdu-sensors.influxdb-url" -}}
-{{ default (include "call-subchart" (list . "influxdb" "influxdb.fullname") | printf "http://%s:8086") .Values.telegrafSidecar.influxdbUrl }}
+{{- if .Values.influxdb.enabled }}
+{{ include "call-subchart" (list . "influxdb" "influxdb.fullname") | printf "http://%s:8086" }}
+{{- else }}
+{{ .Values.telegrafSidecar.influxdbUrl }}
+{{- end }}
 {{- end }}
