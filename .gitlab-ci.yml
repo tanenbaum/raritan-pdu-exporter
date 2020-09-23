@@ -2,6 +2,7 @@ stages:
 - build
 - lint
 - build_images
+- publish
 
 variables:
   GO_VERSION: "1.15"
@@ -62,3 +63,17 @@ build exporter image:
   extends: .build_image
   script:
   - build -f build/exporter/Dockerfile $BUILD_ARG -p $CI_PROJECT_PATH/exporter .
+
+helm publish:
+  image: $HELM_IMAGE
+  stage: publish
+  script:
+    - echo $GOOGLE_APPLICATION_CREDENTIALS > helm-bucket.json
+    - export GOOGLE_APPLICATION_CREDENTIALS=helm-bucket.json
+    - helm repo add edgetic-stable gs://edgetic-helm/stable
+    - helm package --app-version $CI_COMMIT_TAG --version $CI_COMMIT_TAG $PDU_SENSORS_CHART
+    - helm gcs push pdu-sensors-$CI_COMMIT_TAG.tgz edgetic-stable
+  variables:
+    GIT_STRATEGY: none
+  only:
+    - tags
