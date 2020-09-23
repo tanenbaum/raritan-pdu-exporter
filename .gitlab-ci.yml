@@ -1,9 +1,51 @@
 stages:
+- build
+- lint
 - build_images
 
 variables:
   GO_VERSION: "1.15"
+  GO_IMAGE: golang:$GO_VERSION
+  GOPATH: $CI_PROJECT_DIR/.go
   CI_IMAGE_TAG: $CI_COMMIT_SHA
+  HELM_IMAGE: registry.gitlab.com/edgetic/ci/helm:v3.3.3
+  PDU_SENSORS_CHART: deploy/charts/pdu-sensors
+
+build:
+  image: $GO_IMAGE
+  stage: build
+  script:
+    - make build
+  artifacts:
+    paths:
+      - deploy/
+  cache:
+    paths:
+    - $GOPATH/pkg/mod/
+    key: ${CI_COMMIT_REF_SLUG}-gomodules
+  only:
+    - master
+    - branches
+    - tags
+    - merge_requests
+
+helm lint:
+  image: $HELM_IMAGE
+  stage: lint
+  script:
+    - yq w -i $PDU_SENSORS_CHART/values.yaml image.tag $CI_IMAGE_TAG
+    - helm lint $PDU_SENSORS_CHART
+    - helm dep update $PDU_SENSORS_CHART
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    paths:
+      - deploy/
+  only:
+    - master
+    - branches
+    - tags
+    - merge_requests
   
 .build_image:
   image:
