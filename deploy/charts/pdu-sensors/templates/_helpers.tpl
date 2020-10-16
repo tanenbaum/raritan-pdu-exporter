@@ -78,7 +78,7 @@ Influxdb URL based on explicit configuration or deployed chart
 {{- define "pdu-sensors.influxdb-url" -}}
 {{- if .Values.influxdb.enabled }}
 {{ include "call-subchart" (list . "influxdb" "influxdb.fullname") | printf "http://%s:8086" }}
-{{- else }}
+{{- else -}}
 {{ .Values.telegrafSidecar.influxdbUrl }}
 {{- end }}
 {{- end }}
