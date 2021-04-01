@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/raritan"
+	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/raritan"
 	"k8s.io/klog/v2"
 )
 

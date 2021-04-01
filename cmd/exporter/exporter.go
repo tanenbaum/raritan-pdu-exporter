@@ -13,9 +13,9 @@ import (
 	"github.com/jessevdk/go-flags"
 	"k8s.io/klog/v2"
 
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/exporter"
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/raritan"
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
+	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/exporter"
+	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/raritan"
+	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
 
 	"net/http"
 
@@ -30,7 +30,7 @@ type Config struct {
 	Username string `short:"u" long:"username" env:"PDU_USERNAME" description:"Username for PDU access"`
 	Password string `short:"p" long:"password" env:"PDU_PASSWORD" description:"Password for PDU access"`
 	Metrics  bool   `long:"metrics" description:"Enable prometheus metrics endpoint"`
-	Port     uint   `long:"port" default:"2112"`
+	Port     uint   `long:"port" default:"2112" description:"Prometheus metrics port"`
 	Interval uint   `short:"i" long:"interval" default:"10" description:"Interval between data scrapes"`
 }
 

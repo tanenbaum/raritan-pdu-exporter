@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
+	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
 )
 
 // Reading from Raritan sensor

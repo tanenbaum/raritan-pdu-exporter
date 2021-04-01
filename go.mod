@@ -1,4 +1,4 @@
-module gitlab.com/edgetic/hw/pdu-sensors
+module gitlab.com/edgetic/oss/raritan-pdu-exporter
 
 go 1.15
 
