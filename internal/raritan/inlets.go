@@ -1,6 +1,6 @@
 package raritan
 
-import "gitlab.com/edgetic/hw/pdu-sensors/internal/rpc"
+import "gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
 
 // InletInfo for PDU inlet
 type InletInfo struct {
