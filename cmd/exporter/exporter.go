@@ -13,9 +13,9 @@ import (
 	"github.com/jessevdk/go-flags"
 	"k8s.io/klog/v2"
 
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/exporter"
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/raritan"
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/exporter"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/raritan"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 
 	"net/http"
 

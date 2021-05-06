@@ -1,6 +1,6 @@
 package raritan
 
-import "gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
+import "github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 
 var (
 	pduPath = mustURL("/model/pdu/0")

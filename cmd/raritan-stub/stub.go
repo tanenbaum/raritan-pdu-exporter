@@ -8,7 +8,7 @@ import (
 	"github.com/goji/httpauth"
 	"github.com/gorilla/mux"
 	"github.com/jessevdk/go-flags"
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 	"k8s.io/klog"
 )
 

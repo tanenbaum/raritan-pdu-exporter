@@ -6,7 +6,7 @@ import (
 	"net/url"
 
 	"github.com/mitchellh/mapstructure"
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 	"k8s.io/klog/v2"
 )
 

@@ -1,4 +1,4 @@
-module gitlab.com/edgetic/oss/raritan-pdu-exporter
+module github.com/tanenbaum/raritan-pdu-exporter
 
 go 1.15
 

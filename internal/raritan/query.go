@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/rpc"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 )
 
 var (

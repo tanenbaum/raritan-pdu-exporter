@@ -7,7 +7,7 @@ build:
   local:
     push: false
   artifacts:
-  - image: registry.gitlab.com/edgetic/oss/raritan-pdu-exporter/exporter
+  - image: registry.github.com/tanenbaum/raritan-pdu-exporter/exporter
     docker:
       dockerfile: build/exporter/Dockerfile
       buildArgs:
@@ -26,7 +26,7 @@ deploy:
       imageStrategy:
         helm: {}
       artifactOverrides:
-        image: registry.gitlab.com/edgetic/oss/raritan-pdu-exporter/exporter
+        image: registry.github.com/tanenbaum/raritan-pdu-exporter/exporter
       setValues:
         influxdb.enabled: true
         influxdb.persistence.enabled: false

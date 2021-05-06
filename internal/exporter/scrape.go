@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/raritan"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/raritan"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog/v2"
 )

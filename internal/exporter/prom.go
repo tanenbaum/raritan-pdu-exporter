@@ -7,7 +7,7 @@ import (
 
 	"github.com/iancoleman/strcase"
 	"github.com/prometheus/client_golang/prometheus"
-	"gitlab.com/edgetic/oss/raritan-pdu-exporter/internal/raritan"
+	"github.com/tanenbaum/raritan-pdu-exporter/internal/raritan"
 )
 
 const (

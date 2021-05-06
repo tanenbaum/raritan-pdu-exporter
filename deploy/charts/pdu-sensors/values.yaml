@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.gitlab.com/edgetic/oss/raritan-pdu-exporter/exporter
+  repository: registry.github.com/tanenbaum/raritan-pdu-exporter/exporter
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
