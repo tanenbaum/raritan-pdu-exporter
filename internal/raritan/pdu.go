@@ -94,3 +94,14 @@ func (c *Client) GetPDUOutlets() ([]Resource, error) {
 
 	return ret, nil
 }
+
+func (c *Client) GetPDUOCP() ([]Resource, error) {
+	ret := []Resource{}
+	if _, err := c.call(*c.BaseURL.ResolveReference(&pduPath), rpc.Request{
+		Method: "getOverCurrentProtectors",
+	}, &ret); err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
