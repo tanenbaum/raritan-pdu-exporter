@@ -2,7 +2,7 @@ package raritan
 
 import "github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 
-// InletInfo for PDU inlet
+// Info for PDU OverCurrentProtector
 type OCPInfo struct {
 	Resource
 	OCPMetadata
@@ -10,13 +10,13 @@ type OCPInfo struct {
 	Sensors
 }
 
-// InletMetadata metadata
+// OverCurrentProtectorMetadata metadata
 type OCPMetadata struct {
 	Label      string
 	MaxTripCnt int
 }
 
-// InletSettings containing name
+// OverCurrentProtectorSettings containing name
 type OCPSettings struct {
 	Name string
 }
