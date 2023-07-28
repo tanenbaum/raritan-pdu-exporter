@@ -46,6 +46,8 @@ func Execute() {
 	r.HandleFunc("/bulk", bulkHandler(bulkClient, conf.Port))
 	r.HandleFunc("/model/inlet/{id:[0-9]+}", inletsHandler)
 	r.HandleFunc("/model/outlet/{id:[0-9]+}", outletsHandler)
+	r.HandleFunc("/tfwopaque/{type}/{id:[0-9]+}", ocpHandler)
+	r.HandleFunc("/tfwopaque/{id:[0-9]+}/{sensor}", sensorHandler)
 	r.HandleFunc("/model/{type}/{id:[0-9]+}/{sensor}", sensorHandler)
 
 	klog.Exit(http.ListenAndServe(fmt.Sprintf(":%d", conf.Port), logger(auth(r))))
