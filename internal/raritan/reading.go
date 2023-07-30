@@ -55,7 +55,7 @@ func (c *Client) GetSensorReadings(sens []Resource) ([]Reading, error) {
 func sensorReadingMethod(res Resource) string {
 	if strings.Contains(res.Type, "NumericSensor") {
 		return "getReading"
-	} else if strings.Contains(res.Type, "StateSensor") {
+	} else if strings.Contains(res.Type, "StateSensor") || strings.Contains(res.Type, "OverCurrentProtectorTripSensor") {
 		return "getState"
 	}
 

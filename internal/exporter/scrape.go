@@ -82,9 +82,19 @@ func pollSensors(client raritan.Client, sl chan<- []SensorLog) error {
 		return fmt.Errorf("Error getting Outlet info: %w", err)
 	}
 
-	klog.V(1).Infof("PDU Outlets: %+v", olsInfo)
+	ocp, err := client.GetPDUOCP()
+	if err != nil {
+		return fmt.Errorf("Error requesting PDU OverCurrentProtectors: %w", err)
+	}
 
-	sl <- allSensors(insInfo, olsInfo)
+	ocpInfo, err := client.GetOCPInfo(ocp)
+	if err != nil {
+		return fmt.Errorf("Error getting OverCurrentProtectors info: %w", err)
+	}
+
+	klog.V(1).Infof("PDU OverCurrentProtectors: %+v", ocpInfo)
+
+	sl <- allSensors(insInfo, olsInfo, ocpInfo)
 	return nil
 }
 
@@ -113,7 +123,7 @@ func pollReadings(client raritan.Client, sens []SensorLog) ([]SensorLog, error) 
 	return logs, nil
 }
 
-func allSensors(iis []raritan.InletInfo, ois []raritan.OutletInfo) []SensorLog {
+func allSensors(iis []raritan.InletInfo, ois []raritan.OutletInfo, ocp []raritan.OCPInfo) []SensorLog {
 	sens := []SensorLog{}
 	for _, i := range iis {
 		for k, v := range i.Sensors {
@@ -139,6 +149,20 @@ func allSensors(iis []raritan.InletInfo, ois []raritan.OutletInfo) []SensorLog {
 				Resource: v,
 				Sensor:   k,
 				Type:     "outlet",
+				Label:    label,
+			})
+		}
+	}
+	for _, o := range ocp {
+		for k, v := range o.Sensors {
+			label := o.Label
+			if o.Name != "" {
+				label = o.Name
+			}
+			sens = append(sens, SensorLog{
+				Resource: v,
+				Sensor:   k,
+				Type:     "ocp",
 				Label:    label,
 			})
 		}

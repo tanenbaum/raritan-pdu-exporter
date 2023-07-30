@@ -9,6 +9,7 @@ import (
 )
 
 const NumOutlets = 8
+const NumOCPs = 2
 
 func pduHandler(w http.ResponseWriter, r *http.Request) {
 	req, err := jsonRequest(w, r)
@@ -51,6 +52,15 @@ func pduHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		raritanResultJSON(w, outlets)
+	case "getOverCurrentProtectors":
+		ocps := make([]raritan.Resource, NumOCPs)
+		for i := 0; i < NumOCPs; i++ {
+			ocps[i] = raritan.Resource{
+				RID:  fmt.Sprintf("/tfwopaque/OverCurrentProtector/%d", i),
+				Type: "pdumodel.OverCurrentProtector_3_0_4",
+			}
+		}
+		raritanResultJSON(w, ocps)
 	default:
 		jsonMethodNotFound(w, method)
 	}
