@@ -1,0 +1,27 @@
+---
+# port: 2112
+metrics: true
+# username: test
+# password: test
+mode: pool
+pdu_config:
+  - name: pdu01
+    address: "http://localhost:3001"
+    username: test
+    password: test
+  - name: pdu02
+    address: "http://localhost:3002"
+    username: test
+    password: test
+  - name: pdu03
+    address: "http://localhost:3003"
+    username: test
+    password: test
+  - name: pdu04
+    address: "http://localhost:3004"
+    username: test
+    password: test
+  - name: pdu05
+    address: "http://localhost:3005"
+    username: test
+    password: test
