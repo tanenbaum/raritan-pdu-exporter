@@ -3,7 +3,6 @@
 metrics: true
 # username: test
 # password: test
-mode: pool
 pdu_config:
   - name: pdu01
     address: "http://localhost:3001"

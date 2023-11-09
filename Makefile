@@ -15,7 +15,7 @@ run-stub:
 	go run ./cmd/raritan-stub --port $(PORT) -u $(USERNAME) -p $(PASSWORD) -v 2
 
 run-pool-exporter:
-	go run ./cmd/exporter -a $(ADDRESS):$(PORT) -u $(USERNAME) -p '$(PASSWORD)' -i $(INTERVAL) --metrics -v 2
+	go run ./cmd/exporter -i $(INTERVAL) -c ./test-config.yaml --metrics -v 2
 
 run-pool-stub:
 	make -j 5 run-pool-stub-1 run-pool-stub-2 run-pool-stub-3 run-pool-stub-4 run-pool-stub-5
@@ -36,9 +36,9 @@ run-pool-stub-5:
 	go run ./cmd/raritan-stub --port 3005 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu05 -v 2
 
 export GO_VERSION = 1.15
-export PDU_USERNAME = $(USERNAME)
-export PDU_PASSWORD = $(PASSWORD)
-export PDU_ADDRESS = $(ADDRESS):$(PORT)
+# export PDU_USERNAME = $(USERNAME)
+# export PDU_PASSWORD = $(PASSWORD)
+# export PDU_ADDRESS = $(ADDRESS):$(PORT)
 SKAFFOLD_FILE = ./deploy/skaffold.yaml
 skaffold-build:
 	skaffold build -f $(SKAFFOLD_FILE)

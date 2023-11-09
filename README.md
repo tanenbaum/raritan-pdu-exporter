@@ -22,19 +22,79 @@ Usage:
   exporter [OPTIONS]
 
 Application Options:
-  -a, --address=  Address of the PDU JSON RPC endpoint
-      --timeout=  Timeout of PDU RPC requests in seconds (default: 10)
-  -u, --username= Username for PDU access [$PDU_USERNAME]
-  -p, --password= Password for PDU access [$PDU_PASSWORD]
-      --metrics   Enable prometheus metrics endpoint
-      --port=     Prometheus metrics port (default 2112)
-  -i, --interval= Interval between data scrapes (default: 10)
+  -n, --name=          Name of the endpoint. Only relevant with multiple endpoints. (default: <hostname>) [$PDU_NAME]
+  -a, --address=       Address of the PDU JSON RPC endpoint [$PDU_ADDRESS]
+      --timeout=       Timeout of PDU RPC requests in seconds (default: 10)
+  -u, --username=      Username for PDU access [$PDU_USERNAME]
+  -p, --password=      Password for PDU access [$PDU_PASSWORD]
+      --metrics        Enable prometheus metrics endpoint
+      --port=          Prometheus metrics port (default: 2112)
+  -i, --interval=      Interval between data scrapes (default: 10)
+  -c, --config=FILE    path to pool config
 
 Help Options:
-  -h, --help      Show this help message
+  -h, --help           Show this help message
 ```
 
 klog flags are also parsed (same flags as glog, see https://github.com/google/glog#setting-flags).
+
+### Config file
+
+The exporter is able to export metrics of multiple pdu's. Therefore a json or YAML file is required with the config of each pdu. The config file is provided to the exporter via the `--config` flag. 
+
+#### example
+
+    ---
+    port: 3000                                    # Listening port 
+    metrics: true                                 # Enable prometheus metrics endpoint
+    username: prometheus                          # username in case no username is defined in pdu_config
+    password: supersecure                         # password in case no password is defined in pdu_config
+    pdu_config:                                   # List of PDU's
+      - name: pdu01                               # Name of the PDU endpoint. If not defined the exporter will use the pdu name set on the pdu endpoint
+        address: "http://pdu01.example.com:3001"  # Endpoint address
+        username: prometheus1                     # Endpoint username
+        password: password01                      # Endpoint password
+      - address: "http://pdu02.example.com:3002"
+        username: test
+        password: test
+      - address: "http://pdu03.example.com:3003"
+
+
+#### examples
+
+## Get Metrics
+
+    # single endpoint
+    curl http://localhost:2112/metrics
+
+    # multiple endpoints
+    curl http://localhost:2112/metrics?endpoint=<pduname>
+    curl http://localhost:2112/metrics?endpoint[]=<pduname1>&endpoint[]=<pduname2>
+    #wildcard
+    curl http://localhost:2112/metrics?endpoint=pdu*
+
+
+## Stub
+
+    Usage:
+      raritan-stub [OPTIONS]
+
+    Application Options:
+      -u, --username=    Username for server basic auth [$PDU_USERNAME]
+      -p, --password=    Password for server basic auth [$PDU_PASSWORD]
+          --port=        Listening port for stub (default: 3000)
+          --pdu-outlets= Number of outlets (default: 8) [$PDU_OUTLETS]
+          --pdu-inlets=  Number of inlets (default: 2) [$PDU_INLETS]
+          --pdu-name=    Name of the pdu (default: Fake Name) [$PDU_NAME]
+          --pdu-serial=  Serial of the pdu (default: FAKESERIALNUMBER) [$PDU_SERIAL]
+
+    Help Options:
+      -h, --help         Show this help message
+
+#### Example
+
+    raritan-stub -u test -p test
+    raritan-stub --port 3001 -u test -p test --pdu-outlets 50 --pdu-inlets 4 --pdu-name pdu01 --pdu-serial qmlksjdfmlqdsnfadfmlqsdfqds
 
 ## Kubernetes Deployment
 

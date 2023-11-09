@@ -44,7 +44,7 @@ func pduHandler(conf Config) http.HandlerFunc {
 					Type: "Inlet_2_0_3",
 				},
 			})
-			ocps := make([]raritan.Resource, NumOCPs)
+			ocps := make([]raritan.Resource, int(conf.PduInlets))
 			for i := 0; i < int(conf.PduInlets); i++ {
 				ocps[i] = raritan.Resource{
 					RID:  fmt.Sprintf("/model/inlet/%d", i),
@@ -53,7 +53,7 @@ func pduHandler(conf Config) http.HandlerFunc {
 			}
 			raritanResultJSON(w, ocps)
 		case "getOutlets":
-			outlets := make([]raritan.Resource, NumOutlets)
+			outlets := make([]raritan.Resource, int(conf.PduOutlets))
 			for i := 0; i < int(conf.PduOutlets); i++ {
 				outlets[i] = raritan.Resource{
 					RID:  fmt.Sprintf("/model/outlet/%d", i),
@@ -62,7 +62,7 @@ func pduHandler(conf Config) http.HandlerFunc {
 			}
 			raritanResultJSON(w, outlets)
 		case "getOverCurrentProtectors":
-			ocps := make([]raritan.Resource, NumOCPs)
+			ocps := make([]raritan.Resource, int(conf.PduInlets))
 			for i := 0; i < int(conf.PduInlets); i++ {
 				ocps[i] = raritan.Resource{
 					RID:  fmt.Sprintf("/tfwopaque/OverCurrentProtector/%d", i),
