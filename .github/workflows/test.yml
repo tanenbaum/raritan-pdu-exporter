@@ -4,7 +4,42 @@ on:
   push: 
 
 jobs:
-  testing:
+  testing_single_pdu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+      - name: Testing
+        run: |
+          mkdir -p out/build && go build -o ./out/build ./cmd/...
+          mkdir -p ./log
+          go run ./cmd/raritan-stub --port 3001 -u ${USERNAME} -p ${PASSWORD} -v 2 &> ./log/stub.log &
+          go run ./cmd/exporter -a http://localhost:${PORT} -u ${USERNAME} -p '${PASSWORD}' -i ${INTERVAL} --metrics -v 2 &> ./log/exporter.log &
+          sleep 5
+          curl http://localhost:2112/metrics > ./log/exporter.out
+          SUCCESS=$?
+          pkill raritan-stub
+          pkill exporter
+          exit $SUCCESS
+        env:
+          PORT: 3000
+          USERNAME: test
+          PASSWORD: test
+          INTERVAL: 5
+      - name: Gather logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-single-pdu
+          path: |
+            ./log/
+
+  testing_multi_pdu:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -65,7 +100,7 @@ jobs:
       - name: Gather logs
         uses: actions/upload-artifact@v3
         with:
-          name: logs
+          name: logs-multi-pdu
           path: |
             ./log/
             ./config.yaml
