@@ -1,0 +1,60 @@
+---
+name: Test Exporter
+on: 
+  push: 
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+      - name: Testing
+        run: |
+          go run ./cmd/raritan-stub --port 3001 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu01 -v 2 &
+          go run ./cmd/raritan-stub --port 3002 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu01 -v 2 &
+          go run ./cmd/raritan-stub --port 3003 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu01 -v 2 &
+          go run ./cmd/raritan-stub --port 3004 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu01 -v 2 &
+          go run ./cmd/raritan-stub --port 3005 -u $(USERNAME) -p $(PASSWORD) --pdu-name pdu01 -v 2 &
+          tee -a config.yml > /dev/null <<EOT
+          ---
+          port: 2112
+          metrics: true
+          pdu_config:
+            - name: pdu01
+              address: "http://localhost:3001"
+              username: ${USERNAME}
+              password: ${PASSWORD}
+            - name: pdu02
+              address: "http://localhost:3002"
+              username: ${USERNAME}
+              password: ${PASSWORD}
+            - name: pdu03
+              address: "http://localhost:3003"
+              username: ${USERNAME}
+              password: ${PASSWORD}
+            - name: pdu04
+              address: "http://localhost:3004"
+              username: ${USERNAME}
+              password: ${PASSWORD}
+            - name: pdu05
+              address: "http://localhost:3005"
+              username: ${USERNAME}
+              password: ${PASSWORD}
+          EOT
+          go run ./cmd/exporter -i $(INTERVAL) -c ./config.yaml --metrics -v 2 &
+          curl http://localhost:2112/metrics
+          pkill raritan-stub
+          pkill exporter
+        env:
+          ADDRESS: http://localhost
+          PORT: 3000
+          USERNAME: test
+          PASSWORD: test
+          INTERVAL: 10
