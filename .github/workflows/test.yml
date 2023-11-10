@@ -3,10 +3,6 @@ name: Run Tests
 on: 
   workflow_dispatch:
   pull_request:
-  push:
-    branches: 
-      - 'feat/**'
-      - master
 
 jobs:
   testing_single_pdu:
