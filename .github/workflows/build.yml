@@ -1,5 +1,5 @@
 ---
-name: Test name
+name: Build
 on: 
   pull_request:
   push: 
