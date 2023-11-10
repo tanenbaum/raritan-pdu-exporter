@@ -1,7 +1,11 @@
 ---
 name: Test Exporter
 on: 
-  push: 
+  workflow_dispatch:
+  push:
+    branches: 
+      - 'feat/**'
+      - master
 
 jobs:
   testing_single_pdu:
