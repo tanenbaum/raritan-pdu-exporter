@@ -1,0 +1,43 @@
+# .gorelease.yml
+
+builds:
+  - id: exporter
+    binary: exporter
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+    main: ./cmd/exporter
+
+  - id: raritan-stub
+    binary: raritan-stub
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+    main: ./cmd/raritan-stub
+
+checksum:
+  name_template: "checksums.txt"
+
+
+  
+  # Add more build configurations for other platforms if needed
+
+# release:
+#   github:
+#     owner: your-github-username
+#     repo: your-repo-name
+#   version:
+#     package: ./cmd/exporter
+#     prefix: v
+#     build: metadata
+#   assets:
+#     - ./bin/exporter-linux-amd64
+#     - ./bin/raritan-stub-linux-amd64
+#     - ./bin/exporter-windows-amd64.exe
+#     - ./bin/raritan-stub-windows-amd64.exe
+#   changelog:
+#     file: ./CHANGELOG.md
