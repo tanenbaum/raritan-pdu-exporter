@@ -20,10 +20,10 @@ jobs:
           mkdir -p out/build && go build -o ./out/build ./cmd/...
           mkdir -p ./log
           go run ./cmd/raritan-stub --port 3001 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &> ./log/stub-pdu01.log &
-          go run ./cmd/raritan-stub --port 3002 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &> ./log/stub-pdu02.log &
-          go run ./cmd/raritan-stub --port 3003 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &> ./log/stub-pdu03.log &
-          go run ./cmd/raritan-stub --port 3004 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &> ./log/stub-pdu04.log &
-          go run ./cmd/raritan-stub --port 3005 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &> ./log/stub-pdu05.log &
+          go run ./cmd/raritan-stub --port 3002 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu02 -v 2 &> ./log/stub-pdu02.log &
+          go run ./cmd/raritan-stub --port 3003 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu03 -v 2 &> ./log/stub-pdu03.log &
+          go run ./cmd/raritan-stub --port 3004 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu04 -v 2 &> ./log/stub-pdu04.log &
+          go run ./cmd/raritan-stub --port 3005 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu05 -v 2 &> ./log/stub-pdu05.log &
           tee -a config.yaml > /dev/null <<EOT
           ---
           port: 2112
