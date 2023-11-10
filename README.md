@@ -42,7 +42,6 @@ klog flags are also parsed (same flags as glog, see https://github.com/google/gl
 
 The exporter is able to export metrics of multiple pdu's. Therefore a json or YAML file is required with the config of each pdu. The config file is provided to the exporter via the `--config` flag. 
 
-#### example
 
     ---
     port: 3000                                    # Listening port 
@@ -60,8 +59,6 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
       - address: "http://pdu03.example.com:3003"
 
 
-#### examples
-
 ## Get Metrics
 
     # single endpoint
@@ -70,7 +67,8 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
     # multiple endpoints
     curl http://localhost:2112/metrics?endpoint=<pduname>
     curl http://localhost:2112/metrics?endpoint[]=<pduname1>&endpoint[]=<pduname2>
-    #wildcard
+    
+    # Wildcard
     curl http://localhost:2112/metrics?endpoint=pdu*
 
 
@@ -91,10 +89,12 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
     Help Options:
       -h, --help         Show this help message
 
+When using multiple instances of the stub, you are adviced to set a unique pdu name. 
+
 #### Example
 
     raritan-stub -u test -p test
-    raritan-stub --port 3001 -u test -p test --pdu-outlets 50 --pdu-inlets 4 --pdu-name pdu01 --pdu-serial qmlksjdfmlqdsnfadfmlqsdfqds
+    raritan-stub --port 3001 -u test -p test --pdu-outlets 50 --pdu-inlets 4 --pdu-name pdu01 --pdu-serial abcd1234
 
 ## Kubernetes Deployment
 
