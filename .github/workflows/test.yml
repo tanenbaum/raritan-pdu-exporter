@@ -17,6 +17,7 @@ jobs:
           go-version: 1.19
       - name: Testing
         run: |
+          mkdir -p out/build && go build -o ./out/build ./cmd/...
           go run ./cmd/raritan-stub --port 3001 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &
           go run ./cmd/raritan-stub --port 3002 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &
           go run ./cmd/raritan-stub --port 3003 -u ${USERNAME} -p ${PASSWORD} --pdu-name pdu01 -v 2 &
@@ -48,7 +49,8 @@ jobs:
               username: ${USERNAME}
               password: ${PASSWORD}
           EOT
-          go run ./cmd/exporter -i $(INTERVAL) -c ./config.yaml --metrics -v 2 &
+          go run ./cmd/exporter -i ${INTERVAL} -c ./config.yaml --metrics -v 2 &
+          sleep 10
           curl http://localhost:2112/metrics
           pkill raritan-stub
           pkill exporter
@@ -57,4 +59,4 @@ jobs:
           PORT: 3000
           USERNAME: test
           PASSWORD: test
-          INTERVAL: 10
+          INTERVAL: 5
