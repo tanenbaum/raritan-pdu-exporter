@@ -1,3 +1,6 @@
 .vscode/
-out/
 config.yaml
+
+# binaries
+out/
+dist/
