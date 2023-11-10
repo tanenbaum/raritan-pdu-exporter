@@ -1,5 +1,3 @@
-# .gorelease.yml
-
 builds:
   - id: exporter
     binary: exporter
@@ -22,22 +20,16 @@ builds:
 checksum:
   name_template: "checksums.txt"
 
+changelog:
+  filters:
+    include:
+      - >
+        "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)"
 
-  
-  # Add more build configurations for other platforms if needed
-
-# release:
-#   github:
-#     owner: your-github-username
-#     repo: your-repo-name
-#   version:
-#     package: ./cmd/exporter
-#     prefix: v
-#     build: metadata
-#   assets:
-#     - ./bin/exporter-linux-amd64
-#     - ./bin/raritan-stub-linux-amd64
-#     - ./bin/exporter-windows-amd64.exe
-#     - ./bin/raritan-stub-windows-amd64.exe
-#   changelog:
-#     file: ./CHANGELOG.md
+archives:
+  - id: exporter
+    builds: [exporter]
+    name_template: "exporter_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: raritan-stub
+    builds: [raritan-stub]
+    name_template: "raritan-stub_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
