@@ -339,6 +339,8 @@ func listContains(lst []string, a string) bool {
 	for _, p := range lst {
 		if p == "all" {
 			return true
+		} else if p == a {
+			return true
 		}
 	}
 	return false
