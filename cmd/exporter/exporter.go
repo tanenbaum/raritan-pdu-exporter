@@ -117,12 +117,12 @@ func metricsHandler(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 
 	endpointFilter := []string{}
-	if params.Has("endpoint") {
-		endpointFilter = append(endpointFilter, params.Get("endpoint"))
+	if params.Has("name") {
+		endpointFilter = append(endpointFilter, params.Get("name"))
 	}
 
 	for k, v := range params {
-		if k == "endpoint[]" {
+		if k == "name[]" {
 			endpointFilter = append(endpointFilter, v...)
 		}
 	}

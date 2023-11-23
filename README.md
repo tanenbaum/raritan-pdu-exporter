@@ -72,11 +72,11 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
     curl http://localhost:2112/metrics
 
     # multiple endpoints
-    curl http://localhost:2112/metrics?endpoint=<pduname>
-    curl http://localhost:2112/metrics?endpoint[]=<pduname1>&endpoint[]=<pduname2>
+    curl http://localhost:2112/metrics?name=<pduname>
+    curl http://localhost:2112/metrics?name[]=<pduname1>&name[]=<pduname2>
     
     # Wildcard
-    curl http://localhost:2112/metrics?endpoint=pdu*
+    curl http://localhost:2112/metrics?name=pdu*
 
 
 ## Stub
