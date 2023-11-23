@@ -14,9 +14,13 @@ import (
 
 // Config for stub
 type Config struct {
-	Username string `short:"u" long:"username" env:"PDU_USERNAME" description:"Username for server basic auth"`
-	Password string `short:"p" long:"password" env:"PDU_PASSWORD" description:"Password for server basic auth"`
-	Port     uint   `long:"port" default:"3000"`
+	Username   string `short:"u" long:"username" required:"true" env:"PDU_USERNAME" description:"Username for server basic auth"`
+	Password   string `short:"p" long:"password" required:"true" env:"PDU_PASSWORD" description:"Password for server basic auth"`
+	Port       uint   `long:"port" default:"3000" description:"Listening port for stub"`
+	PduOutlets uint   `long:"pdu-outlets" env:"PDU_OUTLETS" default:"8" description:"Number of outlets"`
+	PduInlets  uint   `long:"pdu-inlets" env:"PDU_INLETS" default:"2"  description:"Number of inlets"`
+	PduName    string `long:"pdu-name" env:"PDU_NAME" default:"Fake Name" description:"Name of the pdu"`
+	PduSerial  string `long:"pdu-serial" env:"PDU_SERIAL" default:"FAKESERIALNUMBER" description:"Serial of the pdu"`
 }
 
 func Execute() {
@@ -42,7 +46,7 @@ func Execute() {
 	})
 
 	r := mux.NewRouter()
-	r.HandleFunc("/model/pdu/0", pduHandler)
+	r.HandleFunc("/model/pdu/0", pduHandler(*conf))
 	r.HandleFunc("/bulk", bulkHandler(bulkClient, conf.Port))
 	r.HandleFunc("/model/inlet/{id:[0-9]+}", inletsHandler)
 	r.HandleFunc("/model/outlet/{id:[0-9]+}", outletsHandler)
