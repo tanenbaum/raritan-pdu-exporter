@@ -53,7 +53,7 @@ func Execute() {
 	r.HandleFunc("/tfwopaque/{type}/{id:[0-9]+}", ocpHandler)
 	r.HandleFunc("/tfwopaque/{id:[0-9]+}/{sensor}", sensorHandler)
 	r.HandleFunc("/model/{type}/{id:[0-9]+}/{sensor}", sensorHandler)
-
+	r.HandleFunc("/snmp", snmpHandler)
 	klog.Exit(http.ListenAndServe(fmt.Sprintf(":%d", conf.Port), logger(auth(r))))
 }
 

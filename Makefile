@@ -1,7 +1,8 @@
 .PHONY: build
 build:
-	mkdir -p out/build
-	go build -o ./out/build ./cmd/...
+	# mkdir -p out/build
+	# go build -o ./out/build ./cmd/...
+	goreleaser build --clean --snapshot
 
 ADDRESS = http://localhost
 PORT = 3000
@@ -15,7 +16,7 @@ run-stub:
 	go run ./cmd/raritan-stub --port $(PORT) -u $(USERNAME) -p $(PASSWORD) -v 2
 
 run-pool-exporter:
-	go run ./cmd/exporter -i $(INTERVAL) -c ./test-config.yaml --metrics -v 2
+	go run ./cmd/exporter -i $(INTERVAL) -c ./config/test-config.yaml --metrics -v 2
 
 run-pool-stub:
 	make -j 5 run-pool-stub-1 run-pool-stub-2 run-pool-stub-3 run-pool-stub-4 run-pool-stub-5

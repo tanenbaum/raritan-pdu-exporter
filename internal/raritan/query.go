@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"net/url"
+	"strconv"
+	"time"
 
 	"github.com/tanenbaum/raritan-pdu-exporter/internal/rpc"
 )
@@ -127,4 +130,33 @@ func mustURL(path string) url.URL {
 		panic(err)
 	}
 	return *u
+}
+
+func (c *Client) ConnectionCheck() error {
+	var port int
+	if p, err := strconv.Atoi(c.BaseURL.Port()); err != nil || p == 0 {
+		if c.BaseURL.Scheme == "http" {
+			port = 80
+		} else if c.BaseURL.Scheme == "https" {
+			port = 443
+		} else {
+			return fmt.Errorf("invalid port number")
+		}
+	} else {
+		port = p
+	}
+
+	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", c.BaseURL.Hostname(), port), 3*time.Second)
+	defer func() {
+		if conn != nil {
+			err := conn.Close()
+			if err != nil {
+				fmt.Printf("failed to close connection: %s\n", err)
+			}
+		}
+	}()
+	if err != nil {
+		return fmt.Errorf("failed to connect to TCP %s", fmt.Sprintf("%s:%d", c.BaseURL.Hostname(), port))
+	}
+	return nil
 }

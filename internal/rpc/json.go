@@ -122,7 +122,7 @@ func (c *client) Call(url url.URL, req Request) (*Response, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return nil, fmt.Errorf("Non 200 status code in RPC response: %s", res.Status)
+		return nil, fmt.Errorf("%s", res.Status)
 	}
 
 	response := &Response{}

@@ -46,13 +46,20 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
     ---
     port: 3000                                    # Listening port 
     metrics: true                                 # Enable prometheus metrics endpoint
+    interval: 10                                  # Interval to gather metrics. Exporter will check for new sensors every 10*interval
     username: prometheus                          # username in case no username is defined in pdu_config
     password: supersecure                         # password in case no password is defined in pdu_config
-    pdu_config:                                   # List of PDU's
-      - name: pdu01                               # Name of the PDU endpoint. If not defined the exporter will use the pdu name set on the pdu endpoint
-        address: "http://pdu01.example.com:3001"  # Endpoint address
-        username: prometheus1                     # Endpoint username
-        password: password01                      # Endpoint password
+    exporter_labels:
+      use_config_name: true                       # Use the name from pdu_config as `pdu_name` label in the metrics. (Defaul: false)
+      serial_number: false                        # Add serial number as metric label (Defaul: true)
+      snmp_sys_contact: true                      # Add snmp sys_contact as metric label (Defaul: false)
+      snmp_sys_name: true                         # Add snmp sys_name as metric label (Defaul: false)
+      snmp_sys_location: true                     # Add snmp sys_location as metric label (Defaul: false)
+    pdu_config:
+      - name: pdu01                               # Name of the PDU endpoint.
+        address: "http://pdu01.example.com:3001"  # pdu address
+        username: prometheus1                     # pdu username
+        password: password01                      # pdu password
       - address: "http://pdu02.example.com:3002"
         username: test
         password: test
@@ -65,11 +72,11 @@ The exporter is able to export metrics of multiple pdu's. Therefore a json or YA
     curl http://localhost:2112/metrics
 
     # multiple endpoints
-    curl http://localhost:2112/metrics?endpoint=<pduname>
-    curl http://localhost:2112/metrics?endpoint[]=<pduname1>&endpoint[]=<pduname2>
+    curl http://localhost:2112/metrics?name=<pduname>
+    curl http://localhost:2112/metrics?name[]=<pduname1>&name[]=<pduname2>
     
     # Wildcard
-    curl http://localhost:2112/metrics?endpoint=pdu*
+    curl http://localhost:2112/metrics?name=pdu*
 
 
 ## Stub

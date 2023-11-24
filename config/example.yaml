@@ -1,0 +1,21 @@
+---
+port: 2113
+metrics: true
+interval: 10
+username: default_user
+password: supersecuredefaultpassword
+pdu_config:
+  - name: pdu01
+    address: https://pdu01.example.com
+    username: username
+    password: supersecure
+  - address: https://pdu02.example.com
+  - address: https://pdu03.example.com
+    username: username
+    password: supersecure
+exporter_labels:
+  # use_config_name: true
+  # serial_number: false
+  # snmp_sys_contact: true
+  # snmp_sys_name: true
+  # snmp_sys_location: true
