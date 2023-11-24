@@ -101,7 +101,7 @@ func (c *PrometheusCollector) Collect(metric chan<- prometheus.Metric) {
 		desc := prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, "status", "pdu_active"),
 			"PDU status",
-			[]string{"pdu_conf_name"},
+			[]string{"pdu_name"},
 			nil,
 		)
 		metric <- prometheus.MustNewConstMetric(desc, prometheus.GaugeValue, float64(0), c.Name)
