@@ -5,7 +5,7 @@ metrics: true
 # password: test
 interval: 30
 exporter_labels:
-  use_config_name: true
+  use_config_name: false
   serial_number: false
   snmp_sys_contact: false
   snmp_sys_name: false
@@ -13,9 +13,9 @@ exporter_labels:
 pdu_config:
   - name: conf_pdu01
     address: "http://localhost:3001"
-    username: test2
+    username: test
     password: test
-  - #name: conf_pdu02
+  - name: conf_pdu02
     address: "http://localhost:3002"
     username: test
     password: test
