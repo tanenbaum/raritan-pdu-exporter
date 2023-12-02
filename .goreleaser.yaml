@@ -1,0 +1,35 @@
+builds:
+  - id: exporter
+    binary: exporter
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+    main: ./cmd/exporter
+
+  - id: raritan-stub
+    binary: raritan-stub
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+    main: ./cmd/raritan-stub
+
+checksum:
+  name_template: "checksums.txt"
+
+# changelog:
+#   filters:
+#     include:
+#       - >
+#         "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)"
+
+archives:
+  - id: exporter
+    builds: [exporter]
+    name_template: "exporter_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: raritan-stub
+    builds: [raritan-stub]
+    name_template: "raritan-stub_{{ .Version }}_{{ .Os }}_{{ .Arch }}"

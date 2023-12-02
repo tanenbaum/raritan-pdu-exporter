@@ -1,2 +1,13 @@
 .vscode/
+config.yaml
+
+# binaries
 out/
+dist/
+output.txt
+
+# archives
+*.tgz
+*.zip
+*.tar
+*.gz

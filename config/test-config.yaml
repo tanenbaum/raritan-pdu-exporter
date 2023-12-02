@@ -1,0 +1,33 @@
+---
+# port: 2112
+metrics: true
+# username: test
+# password: test
+interval: 30
+exporter_labels:
+  use_config_name: false
+  serial_number: false
+  snmp_sys_contact: false
+  snmp_sys_name: false
+  snmp_sys_location: false
+pdu_config:
+  - name: conf_pdu01
+    address: "http://localhost:3001"
+    username: test
+    password: test
+  - name: conf_pdu02
+    address: "http://localhost:3002"
+    username: test
+    password: test
+  - name: conf_pdu03
+    address: "http://localhost:3003"
+    username: test
+    password: test
+  - name: conf_pdu04
+    address: "http://localhost:3004"
+    username: test
+    password: test
+  - name: conf_pdu05
+    address: "http://localhost:3005"
+    username: test
+    password: test

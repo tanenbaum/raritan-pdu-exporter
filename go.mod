@@ -10,6 +10,7 @@ require (
 	github.com/mitchellh/mapstructure v1.3.3
 	github.com/prometheus/client_golang v1.7.1
 	golang.org/x/sys v0.0.0-20200828081204-131dc92a58d5 // indirect
+	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.19.0
 	k8s.io/klog v1.0.0
 	k8s.io/klog/v2 v2.3.0
