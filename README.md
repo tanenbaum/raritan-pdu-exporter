@@ -6,6 +6,14 @@ Provides a prometheus endpoint to export the sensor data.
 
 Raritan RPC docs are here - https://help.raritan.com/json-rpc/pdu/v3.5.0/index.html
 
+## Notes
+
+Starting with firmware 4.0.10, Raritan PDUs have a built-in Prometheus exposition endpoint
+at `https://<device_ip>/cgi-bin/dump_prometheus.cgi`. Consider giving that one a try before
+running this exporter.
+
+This project is not affiliated with Raritan.
+
 ## Building
 
 Requires Golang 1.15+.
